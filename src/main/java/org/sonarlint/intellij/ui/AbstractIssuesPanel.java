@@ -19,6 +19,7 @@
  */
 package org.sonarlint.intellij.ui;
 
+import com.intellij.codeInsight.daemon.LineMarkerInfo;
 import com.intellij.ide.OccurenceNavigator;
 import com.intellij.ide.util.PropertiesComponent;
 import com.intellij.openapi.actionSystem.ActionGroup;
@@ -26,7 +27,9 @@ import com.intellij.openapi.actionSystem.ActionManager;
 import com.intellij.openapi.actionSystem.ActionToolbar;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.components.ServiceManager;
+import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.RangeMarker;
+import com.intellij.openapi.editor.impl.RangeMarkerImpl;
 import com.intellij.openapi.fileEditor.OpenFileDescriptor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.SimpleToolWindowPanel;
@@ -139,6 +142,41 @@ abstract class AbstractIssuesPanel extends SimpleToolWindowPanel implements Occu
       flowsTree.getEmptyText().setText("Selected issue doesn't have flows");
       flowsTreeBuilder.setFlows(issue.flows(), issue.getRange(), issue.getMessage());
       flowsTree.expandAll();
+    } else {
+      flowsTreeBuilder.clearFlows();
+      flowsTree.getEmptyText().setText("No issue selected");
+      rulePanel.setRuleKey(null);
+      highlighting.removeHighlightingFlows();
+    }
+  }
+
+  /***
+   * 自定义监听事件
+   */
+  protected void issueTreeSelectionChanged1() {
+    IssueNode[] selectedNodes = tree.getSelectedNodes(IssueNode.class, null);
+    System.out.println("选择问题树的节点数:" + selectedNodes.length);
+    if (selectedNodes.length > 0) {
+      LiveIssue issue = selectedNodes[0].issue();
+      rulePanel.setRuleKey(issue);
+      if (issue.getRange() != null) {
+        String message = issue.getMessage();
+        RangeMarker rangeMarker = issue.getRange();
+        if(rangeMarker instanceof RangeMarkerImpl){
+          RangeMarkerImpl rangeMarkerImpl = (RangeMarkerImpl) rangeMarker;
+        }
+        LineMarkerInfo lineMarkerInfo = null;
+
+        String className = rangeMarker.getClass().getName();
+        Document document = rangeMarker.getDocument();
+        int startOffset = rangeMarker.getStartOffset();
+        int endOffset = rangeMarker.getEndOffset();
+//        highlighting.highlightFlowsWithHighlightersUtil(issue.getRange(), issue.getMessage(), issue.flows());
+        highlighting.highlightFlowsWithHighlightersUtil(issue.getRange(), issue.getMessage(), Collections.emptyList());
+      }
+//      flowsTree.getEmptyText().setText("Selected issue doesn't have flows");
+//      flowsTreeBuilder.setFlows(issue.flows(), issue.getRange(), issue.getMessage());
+//      flowsTree.expandAll();
     } else {
       flowsTreeBuilder.clearFlows();
       flowsTree.getEmptyText().setText("No issue selected");
