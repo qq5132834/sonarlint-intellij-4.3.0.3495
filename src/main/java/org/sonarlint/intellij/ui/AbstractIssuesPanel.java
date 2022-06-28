@@ -20,6 +20,8 @@
 package org.sonarlint.intellij.ui;
 
 import com.intellij.codeInsight.daemon.LineMarkerInfo;
+import com.intellij.codeInsight.daemon.LineMarkerProvider;
+import com.intellij.codeInsight.daemon.RelatedItemLineMarkerProvider;
 import com.intellij.ide.OccurenceNavigator;
 import com.intellij.ide.util.PropertiesComponent;
 import com.intellij.openapi.actionSystem.ActionGroup;
@@ -34,6 +36,7 @@ import com.intellij.openapi.fileEditor.OpenFileDescriptor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.SimpleToolWindowPanel;
 import com.intellij.openapi.ui.Splitter;
+import com.intellij.openapi.util.Key;
 import com.intellij.tools.SimpleActionGroup;
 import com.intellij.ui.ScrollPaneFactory;
 import com.intellij.ui.components.JBTabbedPane;
@@ -54,6 +57,8 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
+
+import org.jetbrains.annotations.NotNull;
 import org.sonarlint.intellij.core.ProjectBindingManager;
 import org.sonarlint.intellij.editor.SonarLintHighlighting;
 import org.sonarlint.intellij.issue.LiveIssue;
@@ -166,13 +171,66 @@ abstract class AbstractIssuesPanel extends SimpleToolWindowPanel implements Occu
           RangeMarkerImpl rangeMarkerImpl = (RangeMarkerImpl) rangeMarker;
         }
         LineMarkerInfo lineMarkerInfo = null;
+        RelatedItemLineMarkerProvider relatedItemLineMarkerProvider = null;
+        LineMarkerProvider lineMarkerProvider = null;
 
         String className = rangeMarker.getClass().getName();
         Document document = rangeMarker.getDocument();
         int startOffset = rangeMarker.getStartOffset();
         int endOffset = rangeMarker.getEndOffset();
 //        highlighting.highlightFlowsWithHighlightersUtil(issue.getRange(), issue.getMessage(), issue.flows());
-        highlighting.highlightFlowsWithHighlightersUtil(issue.getRange(), issue.getMessage(), Collections.emptyList());
+
+        RangeMarker rangeMarker1 = new RangeMarker() {
+          @NotNull
+          @Override
+          public Document getDocument() {
+            System.out.println("rangeMarker1.getDocument");
+            return rangeMarker.getDocument();
+          }
+
+          @Override
+          public int getStartOffset() {
+            System.out.println("rangeMarker1.getStartOffset");
+            return rangeMarker.getStartOffset();
+          }
+
+          @Override
+          public int getEndOffset() {
+            System.out.println("rangeMarker1.getEndOffset");
+            return rangeMarker.getEndOffset();
+          }
+
+          @Override
+          public boolean isValid() { return false; }
+
+          @Override
+          public void setGreedyToLeft(boolean b) { }
+
+          @Override
+          public void setGreedyToRight(boolean b) { }
+
+          @Override
+          public boolean isGreedyToRight() { return false; }
+
+          @Override
+          public boolean isGreedyToLeft() { return false; }
+
+          @Override
+          public void dispose() {}
+
+          @org.jetbrains.annotations.Nullable
+          @Override
+          public <T> T getUserData(@NotNull Key<T> key) {
+            return null;
+          }
+
+          @Override
+          public <T> void putUserData(@NotNull Key<T> key, @org.jetbrains.annotations.Nullable T t) {
+
+          }
+        };
+
+        highlighting.highlightFlowsWithHighlightersUtil(rangeMarker1, issue.getMessage(), Collections.emptyList());
       }
 //      flowsTree.getEmptyText().setText("Selected issue doesn't have flows");
 //      flowsTreeBuilder.setFlows(issue.flows(), issue.getRange(), issue.getMessage());
