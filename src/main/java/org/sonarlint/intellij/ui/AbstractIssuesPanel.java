@@ -227,7 +227,8 @@ abstract class AbstractIssuesPanel extends SimpleToolWindowPanel implements Occu
     treeBuilder = new IssueTreeModelBuilder();
     DefaultTreeModel model = treeBuilder.createModel();
     tree = new IssueTree(project, model);
-    tree.addTreeSelectionListener(e -> issueTreeSelectionChanged());
+//    tree.addTreeSelectionListener(e -> issueTreeSelectionChanged()); //
+    tree.addTreeSelectionListener(e-> issueTreeSelectionChanged1());   //启用自定义监听
     tree.addKeyListener(new KeyAdapter() {
       @Override
       public void keyPressed(KeyEvent e) {
