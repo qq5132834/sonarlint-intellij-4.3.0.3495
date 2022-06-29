@@ -88,7 +88,7 @@ public class ServerUpdateTask {
 
   public void run(@NotNull ProgressIndicator indicator) {
     indicator.setText("Fetching data...");
-
+    LOGGER.info("ServerUpdateTask.run.修改服务器任务");
     try {
       TaskProgressMonitor monitor = new TaskProgressMonitor(indicator);
       ServerConfiguration serverConfiguration = SonarLintUtils.getServerConfiguration(server);
