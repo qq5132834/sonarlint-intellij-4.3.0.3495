@@ -96,6 +96,7 @@ public class SonarLintTask extends Task.Backgroundable {
 
   @Override
   public void run(ProgressIndicator indicator) {
+    System.out.println("SonarLintTask.run()执行分析任务");
     AccumulatorIssueListener listener = new AccumulatorIssueListener();
     sonarApplication.registerExternalAnnotator();
 
