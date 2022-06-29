@@ -86,6 +86,7 @@ public class SonarAnalyzeFilesAction extends DumbAwareAction {
 
   @Override
   public void actionPerformed(AnActionEvent e) {
+    System.out.println("sonarlint文件分析入口");
     Project project = e.getProject();
     VirtualFile[] files = e.getData(CommonDataKeys.VIRTUAL_FILE_ARRAY);
 
