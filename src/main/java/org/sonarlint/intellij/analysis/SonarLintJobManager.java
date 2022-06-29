@@ -117,6 +117,7 @@ public class SonarLintJobManager extends AbstractProjectComponent {
       progressManager.run(task);
     } else {
       ProgressIndicator progressIndicator = new BackgroundableProcessIndicator(task);
+      System.out.println("提交扫描任务至线程池，异步分析结果");
       executor.submit(() -> progressManager.runProcess(() -> task.run(progressIndicator), progressIndicator));
     }
   }
