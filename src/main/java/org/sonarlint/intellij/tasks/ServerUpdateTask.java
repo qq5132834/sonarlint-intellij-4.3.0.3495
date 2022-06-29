@@ -124,7 +124,7 @@ public class ServerUpdateTask {
 
   private static String buildMinimumVersionFailMessage(Collection<SonarAnalyzer> failingAnalyzers) {
     String msg = "The following plugins do not meet the required minimum versions, please upgrade them in SonarQube: ";
-
+    //sonarlint配置sonar server服务器，对插件版本的要求
     return msg + failingAnalyzers.stream()
       .map(ServerUpdateTask::analyzerToString)
       .collect(Collectors.joining(","));
