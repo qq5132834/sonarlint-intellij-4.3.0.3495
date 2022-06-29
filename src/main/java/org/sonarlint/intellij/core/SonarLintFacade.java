@@ -61,7 +61,7 @@ public abstract class SonarLintFacade {
     Map<String, String> props = new HashMap<>();
     props.putAll(additionalProps);
     props.putAll(projectSettings.getAdditionalProperties());
-    return analyze(baseDir, workDir, inputFiles, props, issueListener, progressMonitor);
+    return analyze(baseDir, workDir, inputFiles, props, issueListener, progressMonitor);  //抽象方法在 StandaloneSonarLintEngineImpl.java中实现
   }
 
   public abstract Collection<VirtualFile> getExcluded(Module module, Collection<VirtualFile> files, Predicate<VirtualFile> testPredicate);
