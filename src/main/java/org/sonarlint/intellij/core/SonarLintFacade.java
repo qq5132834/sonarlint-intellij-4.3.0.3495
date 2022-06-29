@@ -55,6 +55,7 @@ public abstract class SonarLintFacade {
 
   public synchronized AnalysisResults startAnalysis(List<ClientInputFile> inputFiles, IssueListener issueListener,
     Map<String, String> additionalProps, ProgressMonitor progressMonitor) {
+    System.out.println("SonarLintFacade.startAnalysis。开始分析");
     Path baseDir = Paths.get(project.getBasePath());
     Path workDir = baseDir.resolve(Project.DIRECTORY_STORE_FOLDER).resolve("sonarlint").toAbsolutePath();
     Map<String, String> props = new HashMap<>();
