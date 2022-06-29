@@ -96,7 +96,7 @@ public class SonarLintTask extends Task.Backgroundable {
 
   @Override
   public void run(ProgressIndicator indicator) {
-    System.out.println("SonarLintTask.run()执行分析任务");
+    System.out.println("SonarLintTask.run()线程池异步执行分析任务");
     AccumulatorIssueListener listener = new AccumulatorIssueListener();
     sonarApplication.registerExternalAnnotator();
 
@@ -171,7 +171,7 @@ public class SonarLintTask extends Task.Backgroundable {
       indicator.setText("Running SonarLint Analysis for " + numFiles + " files" + suffix);
     } else {
       indicator.setText("Running SonarLint Analysis for '" + getFileName(job.allFiles().iterator().next()) + "'");
-    }
+  }
 
     LOGGER.info(indicator.getText());
 
